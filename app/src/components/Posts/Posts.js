@@ -5,7 +5,7 @@ import useStyles from "./styles";
 
 import Post from "./Post/Post";
 
-export default function Posts() {
+export default function Posts({ setId }) {
   const classes = useStyles();
   const posts = useSelector(state => state.posts);
 
@@ -22,7 +22,7 @@ export default function Posts() {
     >
       {posts.map(post => (
         <Grid key={post._id} item xs={12} sm={6}>
-          <Post post={post} />
+          <Post post={post} setId={setId} />
         </Grid>
       ))}
     </Grid>

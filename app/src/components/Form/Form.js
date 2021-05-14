@@ -1,15 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { TextField, Button, Typography, Paper } from "@material-ui/core";
 import FileBase from "react-file-base64";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import useStyles from "./styles";
 
-import { createPost } from "../../actions/posts";
+import { createPost, updatePost } from "../../actions/posts";
 
-export default function Form() {
-  const classes = useStyles();
-  const dispatch = useDispatch();
-
+export default function Form({ currentId, setId }) {
   const initialState = {
     creator: "",
     title: "",
@@ -18,11 +15,31 @@ export default function Form() {
     image: "",
   };
 
+  const classes = useStyles();
+  const dispatch = useDispatch();
   const [formData, setFormData] = useState(initialState);
+
+  const post = useSelector(state =>
+    currentId ? state.posts.find(p => p._id === currentId) : null
+  );
+
+  useEffect(() => {
+    if (post) return setFormData(post);
+  }, [post]);
+
+  function resetFormHandler() {
+    setId(null);
+    setFormData(initialState);
+  }
 
   function submitHandler(e) {
     e.preventDefault();
-    dispatch(createPost(formData));
+    if (currentId) {
+      dispatch(updatePost(currentId, formData));
+    } else {
+      dispatch(createPost(formData));
+    }
+    resetFormHandler();
   }
 
   return (
@@ -88,7 +105,7 @@ export default function Form() {
             variant='contained'
             size='small'
             color='secondary'
-            onClick={() => setFormData({ ...initialState })}
+            onClick={() => resetFormHandler}
             fullWidth
           >
             Reset

@@ -1,5 +1,6 @@
 import Post from "../models/PostModel.js";
 import HttpError from "../models/HttpError.js";
+import mongoose from "mongoose";
 
 export const getAllPosts = async (req, res, next) => {
   try {
@@ -21,5 +22,20 @@ export const createPost = async (req, res) => {
     res.status(201).json(newPost);
   } catch (err) {
     next(new HttpError(err.message, 409));
+  }
+};
+
+export const updatePost = async (req, res) => {
+  const { id: _id } = req.params;
+  const post = req.body;
+
+  if (!mongoose.Types.ObjectId.isValid(_id))
+    return next(new HttpError("No post with that id", 404));
+
+  try {
+    const updatedPost = await Post.findByIdAndUpdate(_id, post, { new: true });
+    res.json(updatedPost);
+  } catch (err) {
+    next(new HttpError(err.message));
   }
 };

@@ -1,5 +1,9 @@
 import { Router } from "express";
-import { getAllPosts, createPost } from "../controllers/postControllers.js";
+import {
+  getAllPosts,
+  createPost,
+  updatePost,
+} from "../controllers/postControllers.js";
 
 const router = Router();
 
@@ -12,5 +16,10 @@ router.get("/", getAllPosts);
 // @desc    create a Post
 // @access  Public
 router.post("/", createPost);
+
+// @route   PATCH /api/posts/:id
+// @desc    update a post
+// @access  Public
+router.patch("/:id", updatePost);
 
 export default router;

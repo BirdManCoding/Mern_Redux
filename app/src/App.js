@@ -1,4 +1,4 @@
-import { Fragment, useEffect } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { Container, Grid } from "@material-ui/core";
 import { useDispatch } from "react-redux";
 
@@ -9,6 +9,7 @@ import Form from "./components/Form/Form";
 
 function App() {
   const dispatch = useDispatch();
+  const [currentId, setCurrentId] = useState(null);
 
   useEffect(() => {
     console.log("useEffect");
@@ -22,10 +23,10 @@ function App() {
         <main>
           <Grid container justify='space-between' alignItems='stretch'>
             <Grid item xs={12} sm={7}>
-              <Posts />
+              <Posts setId={setCurrentId} />
             </Grid>
             <Grid item xs={12} sm={4}>
-              <Form />
+              <Form currentId={currentId} setId={setCurrentId} />
             </Grid>
           </Grid>
         </main>
